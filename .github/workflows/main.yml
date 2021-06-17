@@ -1,30 +1,39 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: stm32l5
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
-    branches:
-        - '**'
-  pull_request:
-    branches:
-        - '**'
+  workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-    - name: Black Python Code Formatter
-      uses: lgeiger/black-action@v1.0.1
-      with:
-        args: ". -l 79 --diff --color --check"
+      - name: Checkout repo
+        uses: actions/checkout@v2
 
+      - name: mbed build
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/work -w=/work
+          image: mbedos/mbed-os-env:latest
+          shell: bash
+          run: |
+              git clone https://${{ secrets.SYNC_MBED }}:x-oauth-basic@github.com/jeromecoutant/mbed.git mbed-os
+              cd mbed-os
+              git checkout origin/DEV_TFM -b ACTIONS -f
+              cd ..
+              # apt update && apt install sudo
+              # sudo apt-get install srecord -y
+              apt update
+              apt install srecord -y
+              python3 build_tfm.py -m NUCLEO_L552ZE_Q -t GNUARM -c RegressionIPC
+              cd mbed-os
+              git config user.email "jerome.coutant@st.com"
+              git config  user.name "jeromecoutant"
+              echo git commit -am "TFM bin"
+              git commit -am "TFM bin"
+              echo git push origin HEAD -f
+              git push origin HEAD -f
