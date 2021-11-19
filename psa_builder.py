@@ -49,6 +49,12 @@ dependencies = {
             "nuvoton_mbed_m2354_tfm-1.4",
         ],
     },
+    "stm32l5-tfm": {
+        "trusted-firmware-m": [
+            "https://github.com/jeromecoutant/trusted-firmware-m.git",
+            "WIP_STM32L5_TFM",
+        ],
+    },
 }
 
 TC_DICT = {"ARMCLANG": "ARM", "GNUARM": "GCC_ARM"}

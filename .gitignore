@@ -13,3 +13,7 @@ test_spec.json
 
 # Vagrant machine files
 vagrant/.vagrant/
+
+# test
+tfm_test.log
+tfm_application.log

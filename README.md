@@ -70,6 +70,21 @@ To display help on supported options and targets:
 python3 build_tfm.py -h
 ```
 
+## NUCLEO-L552ZE
+
+NUCLEO_L552ZE_Q is supported in mbed-os master repo without Trust Zone support.
+
+Few updates are then needed to support Trsut Zone and TFM.
+Please use https://github.com/jeromecoutant/mbed/tree/WIP_STM32L5_TFMz
+```
+python build_tfm.py -m NUCLEO_L552ZE_Q
+```
+
+For debug, memory size is too small for full debug symbol, use RelWithDebInfo option:
+```
+python build_tfm.py -m NUCLEO_L552ZE_Q --buildtype RelWithDebInfo
+```
+
 ## Building the TF-M Regression Test suite
 
 Use the `-c` option to specify the config to override the default.
@@ -103,6 +118,7 @@ to build an application that runs the test suite.
 * Make sure the TF-M Regression Test suite has **PASSED** on the board before
 running any PSA Compliance Test suite to avoid unpredictable behavior.
 * M2354 hasn't supported PSA compliance test yet.
+* NUCLEO_L552ZE_Q doesn't support PSA compliance test yet.
 
 ## Building the Mbed OS application
 
@@ -132,6 +148,21 @@ The binary is located at:
 * **Mbed CLI 2** - `./cmake_build/<TARGET>/<PROFILE>/<TOOLCHAIN>/mbed-os-tf-m-regression-tests.bin`</br>
 * **Mbed CLI 1** - `./BUILD/<TARGET>/<TOOLCHAIN>/mbed-os-tf-m-regression-tests.bin`
 
+## Building NUCLEO_L552ZE_Q
+
+* Mbed CLI 2 is not supported yet
+
+* Mbed CLI 1 release application:
+```
+$ mbed compile -m NUCLEO_L552ZE_Q -t GCC_ARM
+```
+
+* Mbed CLI 1 RegressionIPC test application:
+```
+$ mbed compile -m NUCLEO_L552ZE_Q -t GCC_ARM -DFLASH_LAYOUT_FOR_TEST
+```
+
+
 ## Running the Mbed OS application manually
 
 1. Connect your Mbed Enabled device to the computer over USB.
@@ -140,6 +171,58 @@ The binary is located at:
 1. Press the reset button on the Mbed device to run the program.
 
 **Note:** The default serial port baud rate is 115200 baud.
+
+## NUCLEO_L552ZE_Q flashing
+
+For NUCLEO_L552ZE_Q, drag and drop feature to copy secured binary files is not supported.
+
+You need to install [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html) application
+
+and add it in your environment path:
+```
+PATH="/C/Program Files/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/":$PATH
+
+or
+
+PATH="~/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/":$PATH
+```
+
+Then execute 2 scripts in this order:
+```
+BUILD/NUCLEO_L552ZE_Q/GCC_ARM/regression.sh
+BUILD/NUCLEO_L552ZE_Q/GCC_ARM/TFM_UPDATE.sh
+```
+
+## Reference logs
+
+Greentea can be used:
+
+- with release application:
+```
+htrun --skip-flashing -v --serial-output-file tfm_application.log -p COM16:115200 --sync=0 -P 40 --compare-log tfm_application_reference.log
+```
+
+- with RegressionIPC test application:
+```
+htrun --skip-flashing -v --serial-output-file tfm_test.log -p COM16:115200 --sync=0 -P 100 --compare-log tfm_test_reference.log
+```
+
+Expected result:
+```
+[1643815540.78][HTST][INF] Target log matches compare log!
+[1643815540.78][HTST][INF] test suite run finished after 54.33 sec...
+[1643815540.79][CONN][INF] received special event '__host_test_finished' value='True', finishing
+[1643815540.82][HTST][INF] CONN exited with code: 0
+[1643815540.82][HTST][INF] No events in queue
+[1643815540.82][HTST][INF] stopped consuming events
+[1643815540.82][HTST][INF] host test result() call skipped, received: True
+[1643815540.82][HTST][WRN] missing __exit event from DUT
+[1643815540.82][HTST][WRN] missing __exit_event_queue event from host test
+[1643815540.82][HTST][INF] calling blocking teardown()
+[1643815540.82][HTST][INF] teardown() finished
+[1643815540.82][HTST][INF] {{result;success}}
+```
+
 
 ## Automating all test suites
 

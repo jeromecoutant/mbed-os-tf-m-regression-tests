@@ -75,6 +75,10 @@ def _clone_tfm_repo(target, commit):
         check_and_clone_repo(
             "trusted-firmware-m", "nuvoton-tfm", TF_M_BUILD_DIR
         )
+    elif target == "NUCLEO_L552ZE_Q":
+            check_and_clone_repo(
+                "trusted-firmware-m", "stm32l5-tfm", TF_M_BUILD_DIR
+            )
     else:
         check_and_clone_repo(
             "trusted-firmware-m", "released-tfm", TF_M_BUILD_DIR
@@ -232,19 +236,24 @@ def _run_cmake_build(cmake_build_dir, args, tgt, tfm_config):
 
     if args.profile:
         cmake_cmd.append("-DTFM_PROFILE=" + args.profile.lower())
+    else:
+        if tgt[0] == "NUCLEO_L552ZE_Q":
+            cmake_cmd.append("-DTFM_PROFILE=profile_medium")
 
     if args.config == SUPPORTED_TFM_CONFIGS[1]:
         cmake_cmd.extend(
             [
                 "-DTEST_NS=ON",
-                "-DTEST_S=ON",
             ]
         )
 
     if args.debug:
         cmake_cmd.append("-DCMAKE_BUILD_TYPE=Debug")
     else:
-        cmake_cmd.append("-DCMAKE_BUILD_TYPE=Release")
+        if args.buildtype:
+            cmake_cmd.append("-DCMAKE_BUILD_TYPE=" + args.buildtype)
+        else:
+            cmake_cmd.append("-DCMAKE_BUILD_TYPE=Release")
 
     if not TARGET_MAP[tgt[0]].tfm_bootloader_supported:
         cmake_cmd.append("-DBL2=FALSE")
@@ -593,6 +602,9 @@ def _build_target(tgt, cmake_build_dir, args):
 
     _run_cmake_build(cmake_build_dir, args, tgt, args.config)
 
+    if tgt[0] == "NUCLEO_L552ZE_Q":
+        subprocess.call(['sh', 'postbuild.sh'], cwd=cmake_build_dir)
+
     if not args.skip_copy:
         source = os.path.join(
             cmake_build_dir, "install", "outputs", tgt[1].upper()
@@ -627,6 +639,7 @@ def _build_tfm(args):
     cmake_build_dir = os.path.join(
         TF_M_BUILD_DIR, "trusted-firmware-m", "cmake_build"
     )
+
     if os.path.isdir(cmake_build_dir):
         shutil.rmtree(cmake_build_dir, onerror=handle_read_permission_error)
 
@@ -702,9 +715,17 @@ def _get_parser():
     )
 
     parser.add_argument(
+        "-b",
+        "--buildtype",
+        help="Build with the given TFM build type",
+        default="Release",
+        choices=["Debug", "Release", "RelWithDebInfo", "MinSizeRel"],
+    )
+
+    parser.add_argument(
         "-d",
         "--debug",
-        help="Set build profile to debug",
+        help="Set build profile to debug (alias for --buildtype Debug)",
         action="store_true",
         default=False,
     )

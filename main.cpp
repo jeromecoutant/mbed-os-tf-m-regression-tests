@@ -25,7 +25,7 @@ int main(void)
     GREENTEA_SETUP(90, "default_auto");
 #endif
 
-    tfm_log_printf("Starting TF-M regression tests\n");
+    tfm_log_printf("Starting TF-M regression tests with mbed-os application\n");
 
     uint32_t retval = tfm_non_secure_client_run_tests();
     TEST_ASSERT_EQUAL_UINT32(0, retval);
@@ -33,9 +33,7 @@ int main(void)
     return 0;
 }
 
-#endif //MBED_CONF_APP_REGRESSION_TEST
-
-#if MBED_CONF_APP_PSA_COMPLIANCE_TEST
+#elif MBED_CONF_APP_PSA_COMPLIANCE_TEST
 
 extern "C" int32_t val_entry(void);
 
@@ -51,10 +49,19 @@ int main(void)
     GREENTEA_SETUP(90, "default_auto");
 #endif
 
-    tfm_log_printf("Starting TF-M PSA API tests\r\n");
+    tfm_log_printf("Starting TF-M PSA API tests with mbed-os application\r\n");
 
     uint32_t retval = val_entry();
     TEST_ASSERT_EQUAL_UINT32(0, retval);
+
+    return 0;
+}
+
+#else
+
+int main(void)
+{
+    printf("Starting TF-M NS application with mbed-os application\n");
 
     return 0;
 }
