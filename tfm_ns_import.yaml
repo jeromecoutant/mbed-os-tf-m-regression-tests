@@ -19,23 +19,23 @@
         "NUCLEO_L552ZE_Q_S": [
             {
                 "src": "install/image_signing/layout_files/signing_layout_ns.o",
-                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/COMPONENT_TFM_S_FW/partition/signing_layout_ns.c"
+                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/TFM_S_FW/partition/signing_layout_ns.c"
             },
             {
                 "src": "install/image_signing/layout_files/signing_layout_s.o",
-                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/COMPONENT_TFM_S_FW/partition/signing_layout_s.c"
+                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/TFM_S_FW/partition/signing_layout_s.c"
             },
             {
                 "src": "lib/ext/tfm_test_repo-src/app/tfm_ns_interface.c",
-                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/COMPONENT_TFM_S_FW/tfm_ns_interface.c"
+                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/TFM_S_FW/tfm_ns_interface.c"
             },
             {
                 "src": "../platform/ext/target/stm/nucleo_l552ze_q/include/flash_layout.h",
-                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/COMPONENT_TFM_S_FW/partition/flash_layout.h"
+                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/TFM_S_FW/partition/flash_layout.h"
             },
             {
                 "src": "../platform/ext/target/stm/nucleo_l552ze_q/include/region_defs.h",
-                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/COMPONENT_TFM_S_FW/partition/region_defs.h"
+                "dst": "targets/TARGET_STM/TARGET_STM32L5/TARGET_STM32L552xE/TARGET_NUCLEO_L552ZE_Q/TFM_S_FW/partition/region_defs.h"
             }
         ],
         "ARM_MUSCA_S1": [
