@@ -34,7 +34,7 @@ dependencies = {
     "released-tfm": {
         "trusted-firmware-m": [
             "https://git.trustedfirmware.org/TF-M/trusted-firmware-m.git",
-            "TF-Mv1.4.0",
+            "TF-Mv1.4.1",
         ],
     },
     "latest-tfm": {

@@ -226,7 +226,13 @@ def _run_cmake_build(cmake_build_dir, args, tgt, tfm_config):
         )
     logging.info(msg)
 
-    cmake_cmd = ["cmake", "../", "-GNinja", "-DTFM_PSA_API=ON", "-DTFM_PROFILE=profile_medium"]
+    cmake_cmd = [
+        "cmake",
+        "../",
+        "-GNinja",
+        "-DTFM_PSA_API=ON",
+        "-DTFM_PROFILE=profile_medium",
+    ]
     cmake_cmd.append("-DTFM_PLATFORM=" + tgt[1])
     cmake_cmd.append("-DTFM_TOOLCHAIN_FILE=../toolchain_" + tgt[2] + ".cmake")
 
@@ -241,8 +247,6 @@ def _run_cmake_build(cmake_build_dir, args, tgt, tfm_config):
 
     if args.debug:
         cmake_cmd.append("-DCMAKE_BUILD_TYPE=Debug")
-    #else:
-        #cmake_cmd.append("-DCMAKE_BUILD_TYPE=Release")
 
     if not TARGET_MAP[tgt[0]].tfm_bootloader_supported:
         cmake_cmd.append("-DBL2=FALSE")

@@ -33,9 +33,7 @@ int main(void)
     return 0;
 }
 
-#endif //MBED_CONF_APP_REGRESSION_TEST
-
-#if MBED_CONF_APP_PSA_COMPLIANCE_TEST
+#elif MBED_CONF_APP_PSA_COMPLIANCE_TEST
 
 extern "C" int32_t val_entry(void);
 
@@ -55,6 +53,15 @@ int main(void)
 
     uint32_t retval = val_entry();
     TEST_ASSERT_EQUAL_UINT32(0, retval);
+
+    return 0;
+}
+
+#else
+
+int main(void)
+{
+    printf("Starting TF-M NS application\n");
 
     return 0;
 }
