@@ -23,13 +23,14 @@ jobs:
           run: |
               git clone https://${{ secrets.SYNC_MBED }}:x-oauth-basic@github.com/jeromecoutant/mbed.git mbed-os
               cd mbed-os
-              git checkout origin/DEV_TFM -b ACTIONS -f
+              git checkout origin/TF-m_for_L5 -b ACTIONS -f
               cd ..
               # apt update && apt install sudo
               # sudo apt-get install srecord -y
               apt update
               apt install srecord -y
-              python3 build_tfm.py -m NUCLEO_L552ZE_Q -t GNUARM -c RegressionIPC
+              python3 build_tfm.py -m NUCLEO_L552ZE_Q_S -t GNUARM -c RegressionIPC
+              ./STM32_TFM_postbuild.sh
               cd mbed-os
               git config user.email "jerome.coutant@st.com"
               git config  user.name "jeromecoutant"
